@@ -3,9 +3,16 @@ from flask import Flask,request,jsonify
 import string
 import fitz
 from nltk.corpus import stopwords
+from nltk.tokenize import sent_tokenize
 import nltk
 import contractions
+from sumy.summarizers.lsa import LsaSummarizer
+from sumy.nlp.tokenizers import Tokenizer
+from sumy.parsers.plaintext import PlaintextParser
+
 nltk.download('stopwords')
+nltk.download('punkt')
+nltk.download('punkt_tab')
 
 
 def read_pdf(filename):
@@ -23,14 +30,24 @@ def remove_stopwords(text):
     text=[word for word in text if word not in stop_words]
     return ' '.join(text)
 
-def clean_text(text):
-    text=expand_contractions(text)
-    text=text.lower()
-    text=text.translate(str.maketrans('','',string.punctuation))
-    text=' '.join(text.split())
-    text=text.strip()
-    text=remove_stopwords(text)
-    return text
+# def clean_text(text):
+#     text=expand_contractions(text)
+#     text=text.lower()
+#     text=text.translate(str.maketrans('','',string.punctuation))
+#     text=' '.join(text.split())
+#     text=text.strip()
+#     text=remove_stopwords(text)
+#     return text
+
+def extract_top_sentences(text):
+    sentences = sent_tokenize(text)
+    sentence_count=max(3,len(sentences)//3)
+    parser=PlaintextParser.from_string(text,Tokenizer("english"))
+    summarizer=LsaSummarizer()
+    top_sentences=summarizer(parser.document,sentence_count)
+    return " ".join(str(sentence) for sentence in top_sentences)
+
+
 
 
 app=Flask(__name__)
@@ -46,8 +63,9 @@ def upload_pdf():
     file.save(filename)
     try:
         text=read_pdf(filename)
-        cleaned_text=clean_text(text)
-        return jsonify({'text':cleaned_text})
+        # cleaned_text=clean_text(text)
+        top_sentences=extract_top_sentences(text)
+        return jsonify({'text':top_sentences})
     except Exception as e:
         return jsonify({'error': str(e)}),500
     
