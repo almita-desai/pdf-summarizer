@@ -1,4 +1,5 @@
 import os
+import json 
 from flask import Flask,request,jsonify
 import string
 import fitz
@@ -22,6 +23,11 @@ def read_pdf(filename):
     text=[page.get_text() for page in doc]
 
     return '\n'.join(text).rstrip('\n')
+
+def load_simplification_rules(path='simplification_rules.json'):
+    with open(path, 'r') as file:
+        return json.load(file)
+simplification_rules = load_simplification_rules()
 
 def expand_contractions(text):
     return contractions.fix(text)
@@ -81,16 +87,19 @@ def rewrite_to_active(sentence):
         return f"{agent.text.capitalize()} {active_verb} {subject.text}."
     return sentence
 
+def simplify_sentence(sentence):
+    for long,short in simplification_rules.items():
+        sentence=sentence.replace(long,short)
+    return sentence 
 
 def apply_abstractive_summary(text):
     sentences=sent_tokenize(text)
     rewritten=[]
     for sentence in sentences:
         if detect_passive(sentence):
-            active_version=rewrite_to_active(sentence)
-            rewritten.append(active_version)
-        else:
-            rewritten.append(sentence)
+            sentence=rewrite_to_active(sentence)
+        simplified_sentence=simplify_sentence(sentence)
+        rewritten.append(simplified_sentence)
     return " ".join(rewritten)
 
 app=Flask(__name__)
