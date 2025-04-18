@@ -12,6 +12,9 @@ from sumy.nlp.tokenizers import Tokenizer
 from sumy.parsers.plaintext import PlaintextParser
 import spacy
 from lemminflect import getInflection
+from werkzeug.utils import secure_filename
+from flask import render_template
+
 
 nltk.download('stopwords')
 nltk.download('punkt')
@@ -103,7 +106,9 @@ def apply_abstractive_summary(text):
     return " ".join(rewritten)
 
 app=Flask(__name__)
-
+@app.route('/')
+def home():
+    return render_template('index.html')
 @app.route('/uploads',methods=["POST"])
 def upload_pdf():
     file=request.files.get('file')
@@ -118,10 +123,12 @@ def upload_pdf():
 
     
     os.makedirs("uploads",exist_ok=True)
-    filename=os.path.join('uploads',file.filename)
-    file.save(filename)
+    filename=secure_filename(file.filename)
+    file_path = os.path.join('uploads', filename)
+    file.save(file_path)
+
     try:
-        text=read_pdf(filename)
+        text=read_pdf(file_path)
         # cleaned_text=clean_text(text)
         top_sentences=extract_top_sentences(text)
         abstractive_summary=apply_abstractive_summary(top_sentences)
@@ -130,7 +137,8 @@ def upload_pdf():
         return jsonify({'error': str(e)}),500
     
     finally:
-        if os.path.exists(filename):
-            os.remove(filename)
+        if os.path.exists(file_path):
+            os.remove(file_path)
+     
 if __name__=='__main__':
     app.run(debug=True)
