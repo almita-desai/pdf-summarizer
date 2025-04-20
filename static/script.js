@@ -18,12 +18,13 @@ form.addEventListener('submit',async(e)=>{
     })
     const data= await response.json()
     if(response.ok){
-        result.innerText=data.text
+         result.innerText=data.text
     }
     else{
         error.innerText=data.error||"an error has occured"
     }
    }
+
    catch(err){
     error.innerText='Error'
    }

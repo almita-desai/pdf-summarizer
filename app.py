@@ -56,7 +56,14 @@ def extract_top_sentences(text):
     parser=PlaintextParser.from_string(text,Tokenizer("english"))
     summarizer=LsaSummarizer()
     top_sentences=summarizer(parser.document,sentence_count)
-    return " ".join(str(sentence) for sentence in top_sentences)
+    top_sentences_text = [str(s) for s in top_sentences]
+    firstSentence=sentences[0]
+    lastSentence=sentences[-1]
+    if firstSentence not in top_sentences_text:
+        top_sentences_text.append(firstSentence)
+    if lastSentence not in top_sentences_text:
+        top_sentences_text.append(lastSentence)
+    return " ".join(top_sentences_text)
 
 def detect_passive(text):
     doc=nlp(text)

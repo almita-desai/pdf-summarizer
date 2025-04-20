@@ -7,11 +7,14 @@
 </head>
 <body>
     <h2>Upload a PDF</h2>
-    <form id="form" action="/uploads" method="POST" enctype="multipart/form-data">
+    <form id="form" action="/uploads"  enctype="multipart/form-data">
     <input type="file" name="file" id="pdfFile" accept="application/pdf">
     <button type="submit">Summarize</button>
     </form>
     <div id="output"></div>
     <div id="error"></div>
   </body>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+
 </html>
