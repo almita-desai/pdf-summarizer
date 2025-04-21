@@ -3,16 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Pdf Summarizer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
 </head>
 <body>
-    <h2>Upload a PDF</h2>
+  <div class="main-container">
+  <div class="form-container">
+    <h2>Pdf Summarizer</h2>
+    <p>Upload a PDF (max 5MB) — the summarizer extracts key points and rewrites them into a shorter, simpler version.</p>
     <form id="form" action="/uploads"  enctype="multipart/form-data">
-    <input type="file" name="file" id="pdfFile" accept="application/pdf">
-    <button type="submit">Summarize</button>
+    <input type="file" name="file" id="pdfFile" accept="application/pdf" onchange="show_file_name()">
+    <label for="pdfFile" class="upload-label"><i class="fas fa-plus"></i>  Upload PDF</label>
+    <span id="fileName">No file chosen</span>
+    <button type="submit">Get Summary</button>
     </form>
+  </div>
+  <div class="output-container">
     <div id="output"></div>
-    <div id="error"></div>
+  </div>
+  </div>
   </body>
   <script src="{{ url_for('static', filename='script.js') }}"></script>
 

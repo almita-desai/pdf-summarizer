@@ -1,0 +1,90 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+body{
+    height: 100vh;
+    display: flex;
+    font-family: 'Arial', sans-serif;
+}
+.main-container{
+    display: flex;
+    width: 100%;
+}
+.form-container{
+    width: 25%;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(55, 17, 83);
+    padding: 30px;
+    border-radius: 3px;
+   
+}
+h2{
+    font-size: 32px;
+    text-align: center;
+    color: white;
+
+}
+p{
+    font-size: 16px;
+    color: white;
+    margin-top: 20px;
+    margin-bottom: 40px;
+
+}
+form{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 30px;
+    
+}
+
+#pdfFile{
+    display: none;
+}
+.upload-label {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: white;
+    height: 50px;
+    border-radius: 4px;
+    font-size: 20px;
+    color: rgb(65, 65, 65);
+   
+  }
+.upload-label:hover{
+    background-color: rgb(242, 242, 242);
+}
+span{
+    color: white;
+}
+
+button{
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(255, 255, 255);
+    height: 50px;
+    border-radius: 4px;
+    font-size: 20px;
+    border: none;
+    cursor: pointer;
+    color: rgb(65, 65, 65);
+    margin-top: 40px;
+
+}
+button:hover{
+    background-color: rgb(242, 242, 242);
+}
+.output-container{
+    width: 75%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(242, 242, 242);
+}
