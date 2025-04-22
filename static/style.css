@@ -17,20 +17,20 @@ body{
     width: 25%;
     flex-direction: column;
     align-items: center;
-    background-color: rgb(55, 17, 83);
+    background-color:rgb(37, 37, 37);
     padding: 30px;
-    border-radius: 3px;
-   
+
 }
 h2{
     font-size: 32px;
     text-align: center;
-    color: white;
+    color: rgb(0, 191, 185);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
 
 }
 p{
     font-size: 16px;
-    color: white;
+    color:rgb(255, 255, 255);
     margin-top: 20px;
     margin-bottom: 40px;
 
@@ -51,15 +51,19 @@ form{
     justify-content: center;
     align-items: center;
     text-align: center;
-    background-color: white;
+    background-color:rgb(37, 37, 37);
     height: 50px;
     border-radius: 4px;
     font-size: 20px;
-    color: rgb(65, 65, 65);
+    font-weight: 700;
+    border: solid rgb(0, 191, 185) 3px;
+    cursor: pointer;
+    color:rgb(0, 191, 185);
    
   }
 .upload-label:hover{
-    background-color: rgb(242, 242, 242);
+    background-color: rgb(59, 59, 59);
+    transform: scale(1.05);
 }
 span{
     color: white;
@@ -68,23 +72,48 @@ span{
 button{
     justify-content: center;
     align-items: center;
-    background-color: rgb(255, 255, 255);
+    background-color:rgb(37, 37, 37);
     height: 50px;
     border-radius: 4px;
     font-size: 20px;
-    border: none;
+    font-weight: 700;
+    border: solid rgb(0, 191, 185) 3px;
     cursor: pointer;
-    color: rgb(65, 65, 65);
+    color:rgb(0, 191, 185);
     margin-top: 40px;
 
 }
 button:hover{
-    background-color: rgb(242, 242, 242);
+    background-color: rgb(59, 59, 59);
+    transform: scale(1.05);
 }
 .output-container{
     width: 75%;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgb(242, 242, 242);
+    background-color: rgb(40, 40, 40);
+
+}
+.output {
+    display: flex;
+    flex-direction: column;
+    width: 85%;
+    height: 500px;
+    overflow-y: auto;
+    padding: 20px;
+    background-color: rgb(37, 37, 37);
+    color: white;
+    border-radius: 30px;
+    text-align: center;
+    justify-content: center;
+    border: dashed;
+    font: 20px;
+   
+}
+.pdfFile-drop-label{
+    font-size:24px;
+    color: white;
+    font-weight: 600;
+    
 }

@@ -18,24 +18,45 @@ form.addEventListener('submit',async(e)=>{
     })
     const data= await response.json()
     if(response.ok){
-         result.innerText=data.text
+        result.style.border="none"
+        result.style.textAlign = 'initial';
+        result.style.justifyContent = 'initial';
+        result.innerText=data.text
+        
     }
     else{
+        result.style.border="none"
         result.innerText=data.error||"an error has occured"
     }
    }
 
    catch(err){
+    result.style.border="none"
     result.innerText='Error'
    }
 })
 
 const show_file_name=()=>{
     let uploaded_file=Input.files[0]
+    
     if(uploaded_file){
-        filename.innerText=Input.files[0].name
+        console.log('show file name')
+        filename.innerText=uploaded_file.name;
     }
     else{
         filename.innerText='No file chosen'
     }
 }
+result.addEventListener("dragover",(e)=>{
+    e.preventDefault()
+
+})
+result.addEventListener("drop",(e)=>{
+    e.preventDefault()
+    Input.files=e.dataTransfer.files
+    result.style.border="none"
+    show_file_name()
+
+    form.dispatchEvent(new Event('submit'))
+})
+

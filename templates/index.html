@@ -22,7 +22,10 @@
     </form>
   </div>
   <div class="output-container">
-    <div id="output"></div>
+    <div id="output" class="output">
+    <input type="file" name="file" id="pdfFile-drop" name="pdfFile-drop" accept="application/pdf" onchange="show_file_name()" hidden>
+    <label for="pdfFile-drop" class="pdfFile-drop-label"><i class="fa fa-plus-circle"></i> Click here to drop file</label>
+    </div>
   </div>
   </div>
   </body>
