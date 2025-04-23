@@ -1,4 +1,5 @@
 import os
+import uuid
 import json 
 from flask import Flask,request,jsonify
 import string
@@ -14,13 +15,16 @@ import spacy
 from lemminflect import getInflection
 from werkzeug.utils import secure_filename
 from flask import render_template
-
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+import networkx as nx
+from nltk.tokenize import sent_tokenize
 
 nltk.download('stopwords')
 nltk.download('punkt')
 nlp = spacy.load("en_core_web_sm")
 
-MAX_FILE_SIZE = 5 * 1024 * 1024 
+MAX_FILE_SIZE =  1 * 1024 * 1024 
 def read_pdf(filename):
     doc=fitz.open(filename)
     text=[page.get_text() for page in doc]
@@ -52,18 +56,31 @@ def remove_stopwords(text):
 
 def extract_top_sentences(text):
     sentences = sent_tokenize(text)
-    sentence_count=max(3,len(sentences)//3)
-    parser=PlaintextParser.from_string(text,Tokenizer("english"))
-    summarizer=LsaSummarizer()
-    top_sentences=summarizer(parser.document,sentence_count)
-    top_sentences_text = [str(s) for s in top_sentences]
-    firstSentence=sentences[0]
-    lastSentence=sentences[-1]
-    if firstSentence not in top_sentences_text:
-        top_sentences_text.append(firstSentence)
-    if lastSentence not in top_sentences_text:
-        top_sentences_text.append(lastSentence)
-    return " ".join(top_sentences_text)
+    if len(sentences) < 3:
+        return text
+
+    sentence_count = max(3, len(sentences) // 3)
+
+    vectorizer = TfidfVectorizer()
+    tfidf_matrix = vectorizer.fit_transform(sentences)
+
+    sim_matrix = cosine_similarity(tfidf_matrix)
+
+    nx_graph = nx.from_numpy_array(sim_matrix)
+    scores = nx.pagerank(nx_graph)
+
+    ranked_sentences = sorted(((scores[i], s) for i, s in enumerate(sentences)), reverse=True)
+    top_sentences = [s for _, s in ranked_sentences[:sentence_count]]
+
+    if sentences[0] not in top_sentences:
+        top_sentences.append(sentences[0])
+    if sentences[-1] not in top_sentences:
+        top_sentences.append(sentences[-1])
+
+    sorted_summary = sorted(top_sentences, key=lambda s: sentences.index(s))
+
+    return " ".join(sorted_summary)
+
 
 def detect_passive(text):
     doc=nlp(text)
@@ -120,28 +137,32 @@ def home():
 def upload_pdf():
     file=request.files.get('file')
     if not file or not file.filename.endswith('.pdf'):
-        return "invalid file",400
+        return jsonify({"error": "Invalid file format. Please upload a PDF file."}), 400
     file.seek(0, os.SEEK_END)
     file_size = file.tell()
     file.seek(0)  
     
     if file_size > MAX_FILE_SIZE:
-        return jsonify({"error": "File size exceeds 5MB limit."}), 400
+        return jsonify({"error": "File size exceeds limit."}), 400
 
     
     os.makedirs("uploads",exist_ok=True)
     filename=secure_filename(file.filename)
-    file_path = os.path.join('uploads', filename)
-    file.save(file_path)
+    unique_filename = f"{os.path.splitext(filename)[0]}_{uuid.uuid4().hex}.pdf"
+    file_path = os.path.join('uploads', unique_filename)
+
 
     try:
+        file.save(file_path)    
         text=read_pdf(file_path)
         # cleaned_text=clean_text(text)
         top_sentences=extract_top_sentences(text)
         abstractive_summary=apply_abstractive_summary(top_sentences)
         return jsonify({'text':abstractive_summary})
     except Exception as e:
-        return jsonify({'error': str(e)}),500
+        return jsonify({
+            "error": f"An error occurred while processing the file: {str(e)}"
+        }), 500
     
     finally:
         if os.path.exists(file_path):

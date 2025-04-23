@@ -108,7 +108,10 @@ button:hover{
     text-align: center;
     justify-content: center;
     border: dashed;
-    font: 20px;
+    font: 24px;
+    font-weight: 500;
+    line-height: 1.8;
+    word-spacing: 3px;
    
 }
 .pdfFile-drop-label{
