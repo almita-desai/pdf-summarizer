@@ -120,3 +120,36 @@ button:hover{
     font-weight: 600;
     
 }
+
+@media (max-width: 600px){
+    body{
+        flex-direction: column;
+        overflow-y: scroll;
+        background-color: rgb(40, 40, 40);
+    }
+    .main-container {
+    flex-direction: column;
+    }
+
+  .form-container {
+    width: 100%;
+    padding: 20px;
+    align-items: stretch;
+  }
+  .output-container {
+    width: 100%;
+    padding: 5px;
+  }
+
+  .output {
+    width: 100%;
+    height: 300px; 
+    font-size: 18px;
+    border-radius: 15px;
+    padding: 15px;
+  }
+  #pdfFile-drop,
+.pdfFile-drop-label {
+  display: none;
+}
+}
