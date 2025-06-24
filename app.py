@@ -20,8 +20,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import networkx as nx
 from nltk.tokenize import sent_tokenize
 
-nltk.download('stopwords')
-nltk.download('punkt')
+nltk.data.path.append("./nltk_data")
 try:
     nlp = spacy.load("en_core_web_sm")
 except:
@@ -164,14 +163,18 @@ def upload_pdf():
         top_sentences=extract_top_sentences(text)
         abstractive_summary=apply_abstractive_summary(top_sentences)
         return jsonify({'text':abstractive_summary})
-    except Exception as e:
+    except (ValueError, FileNotFoundError, RuntimeError) as e:
         return jsonify({
             "error": f"An error occurred while processing the file: {str(e)}"
         }), 500
-    
     finally:
-        if os.path.exists(file_path):
-            os.remove(file_path)
+        try:
+            if os.path.exists(file_path):
+                os.remove(file_path)
+        except:
+            pass
+
+
      
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
