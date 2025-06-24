@@ -22,7 +22,12 @@ from nltk.tokenize import sent_tokenize
 
 nltk.download('stopwords')
 nltk.download('punkt')
-nlp = spacy.load("en_core_web_sm")
+try:
+    nlp = spacy.load("en_core_web_sm")
+except:
+    os.system("python -m spacy download en_core_web_sm")
+    nlp = spacy.load("en_core_web_sm")
+
 
 MAX_FILE_SIZE =  1 * 1024 * 1024 
 def read_pdf(filename):
@@ -168,5 +173,6 @@ def upload_pdf():
         if os.path.exists(file_path):
             os.remove(file_path)
      
-if __name__=='__main__':
-    app.run(debug=True)
+if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)

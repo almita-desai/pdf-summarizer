@@ -108,7 +108,7 @@ button:hover{
     text-align: center;
     justify-content: center;
     border: dashed;
-    font: 24px;
+    font-size: 20px;
     font-weight: 500;
     line-height: 1.8;
     word-spacing: 3px;

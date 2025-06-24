@@ -1,0 +1,11 @@
+Flask
+Werkzeug
+PyMuPDF
+nltk
+contractions
+spacy
+sumy
+lemminflect
+scikit-learn
+networkx
+gunicorn
