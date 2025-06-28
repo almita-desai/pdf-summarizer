@@ -59,4 +59,3 @@ result.addEventListener("drop",(e)=>{
 
     form.dispatchEvent(new Event('submit'))
 })
-
