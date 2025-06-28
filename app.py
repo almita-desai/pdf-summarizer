@@ -2,15 +2,11 @@ import os
 import uuid
 import json 
 from flask import Flask,request,jsonify
-import string
 import fitz
 from nltk.corpus import stopwords
 from nltk.tokenize import sent_tokenize
 import nltk
 import contractions
-from sumy.summarizers.lsa import LsaSummarizer
-from sumy.nlp.tokenizers import Tokenizer
-from sumy.parsers.plaintext import PlaintextParser
 import spacy
 from lemminflect import getInflection
 from werkzeug.utils import secure_filename
